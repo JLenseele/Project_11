@@ -3,5 +3,7 @@ include
 lib
 .Python
 tests/
-.envrc
+.env
 __pycache__
+.idea
+env/
