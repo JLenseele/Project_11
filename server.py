@@ -30,7 +30,7 @@ def showSummary():
         club = [club for club in clubs if club['email'] == request.form['email']][0]
     except IndexError:
         return render_template('index.html', error="Ce compte n'existe pas")
-    return render_template('welcome.html', club=club, competitions=competitions)
+    return render_template('welcome.html', club=club, competitions=competitions, listclubs=clubs)
 
 
 @app.route('/book/<competition>/<club>')
