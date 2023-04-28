@@ -39,7 +39,7 @@ def showSummary():
             print(competition['valid'])
     except IndexError:
         return render_template('index.html', error="Ce compte n'existe pas")
-    return render_template('welcome.html', club=club, competitions=competitions)
+    return render_template('welcome.html', club=club, competitions=competitions, listclubs=clubs)
 
 
 @app.route('/book/<competition>/<club>')
