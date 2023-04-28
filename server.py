@@ -6,14 +6,24 @@ from datetime import datetime
 
 def loadClubs():
     with open('clubs.json') as c:
-         listOfClubs = json.load(c)['clubs']
-         return listOfClubs
+        listOfClubs = json.load(c)['clubs']
+        return listOfClubs
 
 
 def loadCompetitions():
     with open('competitions.json') as comps:
-         listOfCompetitions = json.load(comps)['competitions']
-         return listOfCompetitions
+        listOfCompetitions = json.load(comps)['competitions']
+        return listOfCompetitions
+
+
+def __competition_is_valid(competitions):
+    for c in competitions:
+        c_date = datetime.strptime(c['date'], '%Y-%m-%d %H:%M:%S')
+        if c_date < datetime.now():
+            c['valid'] = False
+        else:
+            c['valid'] = True
+    return competitions
 
 
 app = Flask(__name__)
@@ -22,28 +32,27 @@ app.secret_key = 'something_special'
 competitions = loadCompetitions()
 clubs = loadClubs()
 
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/showSummary',methods=['POST'])
 def showSummary():
     try:
         club = [club for club in clubs if club['email'] == request.form['email']][0]
-        for competition in competitions:
-            compet = datetime.strptime(competition['date'], '%Y-%m-%d %H:%M:%S')
-            if compet < datetime.now():
-                competition['valid'] = False
-            else:
-                competition['valid'] = True
-            print(competition['valid'])
+        competitionsChecked = __competition_is_valid(competitions)
     except IndexError:
         return render_template('index.html', error="Ce compte n'existe pas")
-    return render_template('welcome.html', club=club, competitions=competitions, listclubs=clubs)
+    return render_template('welcome.html',
+                           club=club,
+                           competitions=competitionsChecked,
+                           listclubs=clubs)
 
 
 @app.route('/book/<competition>/<club>')
-def book(competition,club):
+def book(competition, club):
     maxPlaces = 12
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
@@ -51,10 +60,15 @@ def book(competition,club):
         clubPoints = int(foundClub['points'])
         if clubPoints < maxPlaces:
             maxPlaces = clubPoints
-        return render_template('booking.html',club=foundClub,competition=foundCompetition,max=maxPlaces)
+        return render_template('booking.html',
+                               club=foundClub,
+                               competition=foundCompetition,
+                               max=maxPlaces)
     else:
         flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+        return render_template('welcome.html',
+                               club=club,
+                               competitions=competitions)
 
 
 @app.route('/purchasePlaces', methods=['POST'])
