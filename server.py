@@ -1,6 +1,8 @@
 import json
 from flask import Flask,render_template,request,redirect,flash,url_for
 
+from datetime import datetime
+
 
 def loadClubs():
     with open('clubs.json') as c:
@@ -28,6 +30,13 @@ def index():
 def showSummary():
     try:
         club = [club for club in clubs if club['email'] == request.form['email']][0]
+        for competition in competitions:
+            compet = datetime.strptime(competition['date'], '%Y-%m-%d %H:%M:%S')
+            if compet < datetime.now():
+                competition['valid'] = False
+            else:
+                competition['valid'] = True
+            print(competition['valid'])
     except IndexError:
         return render_template('index.html', error="Ce compte n'existe pas")
     return render_template('welcome.html', club=club, competitions=competitions)
