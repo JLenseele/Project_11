@@ -1,5 +1,5 @@
 import json
-from flask import Flask,render_template,request,redirect,flash,url_for
+from flask import Flask, render_template, request, redirect, flash, url_for
 
 from datetime import datetime
 
@@ -23,7 +23,7 @@ def __competition_is_valid(competitions):
         Check if each competition are already passed or no
         & add keyword 'valid' set on True or False
 
-        :param competitions: list of competitions
+        :param: competitions: list of competitions
         :return: list of competitions
     """
     for c in competitions:
@@ -39,8 +39,8 @@ def __set_max_places(club, competition):
     """
             Set the number of places that can be reserved
 
-            :param competitions: instance competitions
-            :param club: instance club
+            :param: competition: instance competitions
+            :param: club: instance club
             :return: the minimum value in set_places list
         """
     max_places = 12
@@ -64,9 +64,9 @@ def index():
 @app.route('/showSummary', methods=['POST'])
 def showSummary():
     """
-        Check if request.form['email'] exist in clubs email
+        Check if (request.form['email']) exist in clubs email
         &
-        Check each competitions in __competition_is_valid()
+        Check each competition in __competition_is_valid()
 
         Exist:return: welcome.html template
         Not exist:return: index.html template with error message
@@ -116,7 +116,7 @@ def book(competition, club):
 def purchasePlaces():
     """
         Recover club & competition instance
-        & substract places booking from competition and club points
+        & subtract places booking from competition and club points
 
         :return: welcome.html template with validation message
     """
@@ -132,9 +132,14 @@ def purchasePlaces():
 
 
 # TODO: Add route for points display
+@app.route('/pointSummary')
+def pointSummary():
+    """ return summary template, to shows the number of points each club has """
+    return render_template('summary.html', club=clubs)
 
 
 @app.route('/logout')
 def logout():
     """logout/redirect the curent user"""
     return redirect(url_for('index'))
+
