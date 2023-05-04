@@ -42,10 +42,42 @@ def __set_max_places(club, competition):
             :param: competition: instance competitions
             :param: club: instance club
             :return: the minimum value in set_places list
-        """
-    max_places = 12
-    set_places = [int(club['points']), max_places, int(competition['numberOfPlaces'])]
+    """
+
+    set_places = [int(club['points']), MAX_PLACES, int(competition['numberOfPlaces'])]
     return min(set_places)
+
+
+def __purchase_register(club, competition, places):
+    """
+        Checks each order already register to accept or not the current order
+
+        :param: competition: instance competitions
+        :param: club: instance club
+        :param: places: number of places in order
+        :return: True or False
+    """
+    order_places = 0
+    for register in purchase:
+        if register[0] == club and register[1] == competition:
+            order_places += register[2]
+
+    print(order_places)
+
+    total_places = order_places + places
+
+    if total_places > MAX_PLACES:
+        remaining = MAX_PLACES - order_places
+        flash(f'Cancelled order ! You cannot order more than ({remaining}) places')
+        print(purchase)
+        print(total_places)
+        return False
+    else:
+        purchase.append([club, competition, places])
+        flash(f'Great-booking complete : {places} places')
+        print(purchase)
+        print(total_places)
+        return True
 
 
 app = Flask(__name__)
@@ -53,6 +85,8 @@ app.secret_key = 'something_special'
 
 competitions = loadCompetitions()
 clubs = loadClubs()
+purchase = []
+MAX_PLACES = 12
 
 
 @app.route('/')
@@ -125,10 +159,11 @@ def purchasePlaces():
     club = [c for c in clubs if c['name'] == request.form['club']][0]
 
     placesRequired = int(request.form['places'])
-    competition['numberOfPlaces'] = int(competition['numberOfPlaces'])-placesRequired
-    club['points'] = int(club['points']) - placesRequired
 
-    flash(f'Great-booking complete! ({placesRequired} places)')
+    if __purchase_register(club['name'], competition['name'], placesRequired):
+        competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - placesRequired
+        club['points'] = int(club['points']) - placesRequired
+
     return render_template('welcome.html', club=club, competitions=competitions)
 
 
