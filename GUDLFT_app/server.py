@@ -96,6 +96,7 @@ def book(competition, club):
         Not found club & competition
         :return: welcome.html template with error message
     """
+
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
 

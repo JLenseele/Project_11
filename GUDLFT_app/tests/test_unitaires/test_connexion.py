@@ -8,11 +8,13 @@ def test_index_status_code_ok(client):
 
 
 def _mocker_club(mocker):
-    clubs = [{"email": "mail_user@valid.com"}]
+    clubs = [{"name": "test_name",
+              "email": "mail_user@valid.com",
+              "points": "20"}]
     mocker.patch('GUDLFT_app.server.clubs', clubs)
 
 
-def _login_user(client, email, valid=True):
+def _login_user(client, email):
 
     rv = client.post(
         "/showSummary",
@@ -21,18 +23,17 @@ def _login_user(client, email, valid=True):
     assert rv.status_code == 200
 
     data = rv.data.decode()
-    if valid:
-        assert data.find("<title>Summary") != -1
-    else:
-        assert data.find("<h4>Ce compte n&#39;existe pas</h4>") != -1
+    return data
 
 
 def test_showSummary_login_succes(client, mocker):
     _mocker_club(mocker)
-    _login_user(client, "mail_user@valid.com")
+    data = _login_user(client, "mail_user@valid.com")
+    assert data.find("<title>Summary") != -1
 
 
 def test_showSummary_login_fail(client, mocker):
     _mocker_club(mocker)
-    _login_user(client, "mail_user@invalid.com", False)
+    data = _login_user(client, "mail_user@invalid.com")
+    assert data.find("<h4>Ce compte n&#39;existe pas</h4>") != -1
 

@@ -23,8 +23,10 @@
             {{comp['name']}}<br />
             Date: {{comp['date']}}</br>
             Number of Places: {{comp['numberOfPlaces']}}
-            {% if comp['numberOfPlaces']|int >0 and comp['valid'] == True %}
+            {% if comp['numberOfPlaces']|int >0 and comp['valid'] == True and club['points']|int >0 %}
             <a href="{{ url_for('book',competition=comp['name'],club=club['name']) }}">Book Places</a>
+            {% elif club['points']|int == 0 %}
+            <p>Your club does not have enough points to book</p>
             {% else %}
             <p>Reservations are unavailable for this event</p>
             {% endif %}
@@ -33,15 +35,5 @@
         {% endfor %}
     </ul>
     {% endwith %}
-
-    <h3>Clubs:</h3>
-    <ul>
-        {% for club in listclubs %}
-        <li>
-            {{ club['name'] }}<br />
-            Point: {{ club['points'] }}
-        </li>
-        <hr />
-        {% endfor %}
 </body>
 </html>
