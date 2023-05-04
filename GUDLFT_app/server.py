@@ -62,21 +62,15 @@ def __purchase_register(club, competition, places):
         if register[0] == club and register[1] == competition:
             order_places += register[2]
 
-    print(order_places)
-
     total_places = order_places + places
 
     if total_places > MAX_PLACES:
         remaining = MAX_PLACES - order_places
         flash(f'Cancelled order ! You cannot order more than ({remaining}) places')
-        print(purchase)
-        print(total_places)
         return False
     else:
         purchase.append([club, competition, places])
         flash(f'Great-booking complete : {places} places')
-        print(purchase)
-        print(total_places)
         return True
 
 
