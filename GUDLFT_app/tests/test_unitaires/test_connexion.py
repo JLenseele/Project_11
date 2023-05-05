@@ -1,7 +1,3 @@
-from GUDLFT_app.tests.conftest import client
-from GUDLFT_app import server
-
-
 def test_index_status_code_ok(client):
     response = client.get('/')
     assert response.status_code == 200
@@ -36,4 +32,3 @@ def test_showSummary_login_fail(client, mocker):
     _mocker_club(mocker)
     data = _login_user(client, "mail_user@invalid.com")
     assert data.find("<h4>Ce compte n&#39;existe pas</h4>") != -1
-

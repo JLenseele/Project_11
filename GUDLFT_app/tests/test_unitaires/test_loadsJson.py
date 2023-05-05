@@ -1,5 +1,3 @@
-import pytest
-
 import GUDLFT_app.server
 
 
