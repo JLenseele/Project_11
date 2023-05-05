@@ -154,10 +154,21 @@ def purchasePlaces():
 
     placesRequired = int(request.form['places'])
 
+<<<<<<< HEAD
     if __purchase_register(club['name'], competition['name'], placesRequired):
         competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - placesRequired
         club['points'] = int(club['points']) - placesRequired
 
+=======
+    flash(f'Great-booking complete! ({placesRequired} places)')
+
+    if 0 < placesRequired < int(club['points']) and placesRequired < int(competition['numberOfPlaces']):
+        if __purchase_register(club['name'], competition['name'], placesRequired):
+            competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - placesRequired
+            club['points'] = int(club['points']) - placesRequired
+    else:
+        flash(f'({placesRequired}) - Number of places requested invalid')
+>>>>>>> test
     return render_template('welcome.html', club=club, competitions=competitions)
 
 
