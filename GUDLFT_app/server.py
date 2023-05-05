@@ -48,11 +48,39 @@ def __set_max_places(club, competition):
     return min(set_places)
 
 
+def __purchase_register(club, competition, places):
+    """
+        Checks each order already register to accept or not the current order
+
+        :param: competition: instance competitions
+        :param: club: instance club
+        :param: places: number of places in order
+        :return: True or False
+    """
+    order_places = 0
+    for register in purchase:
+        if register[0] == club and register[1] == competition:
+            order_places += register[2]
+
+    total_places = order_places + places
+
+    if total_places > MAX_PLACES:
+        remaining = MAX_PLACES - order_places
+        flash(f'Cancelled order ! You cannot order more than ({remaining}) places')
+        return False
+    else:
+        purchase.append([club, competition, places])
+        flash(f'Great-booking complete : {places} places')
+        return True
+
+
 app = Flask(__name__)
 app.secret_key = 'something_special'
 
 competitions = loadCompetitions()
 clubs = loadClubs()
+purchase = []
+MAX_PLACES = 12
 
 
 @app.route('/')
@@ -129,6 +157,13 @@ def purchasePlaces():
     club['points'] = int(club['points']) - placesRequired
 
     flash(f'Great-booking complete! ({placesRequired} places)')
+
+    if 0 < placesRequired < int(club['points']) and placesRequired < int(competition['numberOfPlaces']):
+        if __purchase_register(club['name'], competition['name'], placesRequired):
+            competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - placesRequired
+            club['points'] = int(club['points']) - placesRequired
+    else:
+        flash(f'({placesRequired}) - Number of places requested invalid')
     return render_template('welcome.html', club=club, competitions=competitions)
 
 

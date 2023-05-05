@@ -73,7 +73,25 @@ def test_set_max_places_competition_points(client, mocker):
     mocker.patch('GUDLFT_app.server.competitions', competitions)
 
     app_route = f"/book/{competitions[0]['name']}/{clubs[0]['name']}"
-    print(app_route)
+    rv = client.get(app_route, follow_redirects=True)
+
+    assert rv.status_code == 200
+    data = rv.data.decode()
+    assert data.find('max="4"') != -1
+
+
+def test_set_max_places_competition_points(client, mocker):
+    clubs = [{"name": "test_club",
+              "email": "mail_user@valid.com",
+              "points": "20"}]
+    mocker.patch('GUDLFT_app.server.clubs', clubs)
+
+    competitions = [{"name": "test_competition",
+                     "date": "2024-10-22 13:30:00",
+                     "numberOfPlaces": "4"}]
+    mocker.patch('GUDLFT_app.server.competitions', competitions)
+
+    app_route = f"/book/{competitions[0]['name']}/{clubs[0]['name']}"
     rv = client.get(app_route, follow_redirects=True)
 
     assert rv.status_code == 200
