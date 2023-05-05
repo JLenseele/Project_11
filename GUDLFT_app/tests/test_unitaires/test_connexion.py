@@ -32,3 +32,11 @@ def test_showSummary_login_fail(client, mocker):
     _mocker_club(mocker)
     data = _login_user(client, "mail_user@invalid.com")
     assert data.find("<h4>Ce compte n&#39;existe pas</h4>") != -1
+
+
+def test_logout(client):
+    rv = client.get('/logout', follow_redirects=True)
+    data = rv.data.decode()
+
+    assert rv.status_code == 200
+    assert data.find('Please enter your secretary email to continue:') != -1
