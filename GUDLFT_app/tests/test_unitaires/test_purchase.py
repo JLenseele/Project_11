@@ -88,10 +88,10 @@ def test_purchase_not_enough_point(client, mocker):
     assert data.find('Number of places requested invalid') != -1
 
 
-def test_purchase_not_enough_point(client, mocker):
+def test_purchase_not_enough_places(client, mocker):
 
-    _mocker_club_low_points(mocker)
-    _mocker_competition_valid(mocker)
+    _mocker_club_valid(mocker)
+    _mocker_competition_low_places(mocker)
 
     club = 'test_name'
     competition = 'test_competition'
