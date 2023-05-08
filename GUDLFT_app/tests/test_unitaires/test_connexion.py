@@ -1,6 +1,6 @@
 def test_index_status_code_ok(client):
-    response = client.get('/')
-    assert response.status_code == 200
+    rv = client.get('/')
+    assert rv.status_code == 200
 
 
 def _mocker_club(mocker):
