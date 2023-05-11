@@ -5,6 +5,13 @@ def _mocker_club(mocker):
     mocker.patch('GUDLFT_app.server.clubs', clubs)
 
 
+def _mocker_competition(mocker):
+    competitions = [{"name": "test_competition",
+                     "date": "2024-10-22 13:30:00",
+                     "numberOfPlaces": "20"}]
+    mocker.patch('GUDLFT_app.server.competitions', competitions)
+
+
 def _post_showSummary(client, mocker):
 
     _mocker_club(mocker)
@@ -75,9 +82,8 @@ def test_set_max_places_competition_points(client, mocker):
     assert data.find('max="4"') != -1
 
 
-def test_error_book_url(client):
+def test_error_book_url(client, mocker):
     app_route = f"/book/event_invalid_name/club_invalid_name"
-    print(app_route)
     rv = client.get(app_route, follow_redirects=True)
 
     assert rv.status_code == 500
