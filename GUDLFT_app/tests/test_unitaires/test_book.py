@@ -80,9 +80,9 @@ def test_error_book_url(client):
     print(app_route)
     rv = client.get(app_route, follow_redirects=True)
 
-    assert rv.status_code == 500
+    assert rv.status_code == 200
     data = rv.data.decode()
-    assert data.find('500 Internal Server Error') != -1
+    assert data.find('Parameter missing, please try login again') != -1
 
 
 def test_event_valid(client, mocker):

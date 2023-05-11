@@ -124,21 +124,24 @@ def book(competition, club):
         Not found club & competition
         :return: welcome.html template with error message
     """
-
-    foundClub = [c for c in clubs if c['name'] == club][0]
-    foundCompetition = [c for c in competitions if c['name'] == competition][0]
-
-    if foundClub and foundCompetition:
-        max_places = __set_max_places(foundClub, foundCompetition)
-        return render_template('booking.html',
-                               club=foundClub,
-                               competition=foundCompetition,
-                               max=max_places)
+    try:
+        foundClub = [c for c in clubs if c['name'] == club][0]
+        foundCompetition = [c for c in competitions if c['name'] == competition][0]
+    except IndexError:
+        flash("Parameter missing, please try login again")
+        return render_template('index.html')
     else:
-        flash("Something went wrong-please try again")
-        return render_template('welcome.html',
-                               club=club,
-                               competitions=competitions)
+        if foundClub and foundCompetition:
+            max_places = __set_max_places(foundClub, foundCompetition)
+            return render_template('booking.html',
+                                   club=foundClub,
+                                   competition=foundCompetition,
+                                   max=max_places)
+        else:
+            flash("Something went wrong-please try again")
+            return render_template('welcome.html',
+                                   club=club,
+                                   competitions=competitions)
 
 
 @app.route('/purchasePlaces', methods=['POST'])
