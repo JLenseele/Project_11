@@ -1,51 +1,78 @@
-# gudlift-registration
+<a name="readme-top"></a>
+# Güdlft
 
-1. Why
+Application Web permettant à divers club régionnaux de reserver des places sur divers événements et compétitions de force.
 
+## Features
 
-    This is a proof of concept (POC) project to show a light-weight version of our competition booking platform. The aim is the keep things as light as possible, and use feedback from the users to iterate.
+- Connexion via le mail du club
+- Réservation de places pour une compétition
 
-2. Getting Started
+## Requirements
 
-    This project uses the following technologies:
++ [Python v3+](https://www.python.org/downloads/)
++ [Flask](https://flask.palletsprojects.com/en/1.1.x/)
++ [Pytest](https://docs.pytest.org/en/7.3.x/)
 
-    * Python v3.x+
+## Installation & Get Started
 
-    * [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+#### Récuperer le projet sur GitHub
 
-        Whereas Django does a lot of things for us out of the box, Flask allows us to add only what we need. 
-     
+    git clone https://github.com/JLenseele/Project_11.git
+    cd project_11
 
-    * [Virtual environment](https://virtualenv.pypa.io/en/stable/installation.html)
+#### Créer l'environement virtuel
 
-        This ensures you'll be able to install the correct packages without interfering with Python on your machine.
+    python -m venv env
+    env\Scripts\activate
+    pip install -r requierments.txt
+    
+#### Lancer les tests  
 
-        Before you begin, please ensure you have this installed globally. 
+    pytest -s
+    
+##### Couverture de tests
 
+creer un fichier .coveragerc avec ce contenu
 
-3. Installation
+    [run]
+    omit = GUDLFT_app/tests/*
 
-    - After cloning, change into the directory and type <code>virtualenv .</code>. This will then set up a a virtual python environment within that directory.
+générer un rapport de couverture de test
 
-    - Next, type <code>source bin/activate</code>. You should see that your command prompt has changed to the name of the folder. This means that you can install packages in here without affecting affecting files outside. To deactivate, type <code>deactivate</code>
+    pytest --cov=. --cov-report html
 
-    - Rather than hunting around for the packages you need, you can install in one step. Type <code>pip install -r requirements.txt</code>. This will install all the packages listed in the respective file. If you install a package, make sure others know by updating the requirements.txt file. An easy way to do this is <code>pip freeze > requirements.txt</code>
+#### Lancer le serveur
 
-    - Flask requires that you set an environmental variable to the python file. However you do that, you'll want to set the file to be <code>server.py</code>. Check [here](https://flask.palletsprojects.com/en/1.1.x/quickstart/#a-minimal-application) for more details
+Depuis Windows, lancer cette commande depuis powershell
 
-    - You should now be ready to test the application. In the directory, type either <code>flask run</code> or <code>python -m flask run</code>. The app should respond with an address you should be able to go to using your browser.
+    $env:FLASK_APP = "run.py"
 
-4. Current Setup
+puis sur le terminal
 
-    The app is powered by [JSON files](https://www.tutorialspoint.com/json/json_quick_guide.htm). This is to get around having a DB until we actually need one. The main ones are:
-     
+    python -m flask run
+    
+L'application est désormais disponible depuis l'URL :
+    
+    http://127.0.0.1:5000/
+
+## Utilisation
+
+Depuis votre navigateur, ouvrez l'URL suivant : 
+
+    http://127.0.0.1:5000/ (application web)  
+    
+Vous pourrez ensuite vous connecter avec l'un des identifiants présent dans le fichier club.json fourni
+
+## Current Setup
+
+Cette application fonctionne avec des fichiers JSON comme BDD [JSON files](https://www.tutorialspoint.com/json/json_quick_guide.htm).
     * competitions.json - list of competitions
     * clubs.json - list of clubs with relevant information. You can look here to see what email addresses the app will accept for login.
 
-5. Testing
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-    You are free to use whatever testing framework you like-the main thing is that you can show what tests you are using.
+## Contributors
 
-    We also like to show how well we're testing, so there's a module called 
-    [coverage](https://coverage.readthedocs.io/en/coverage-5.1/) you should add to your project.
+[JLenseele](https://github.com/JLenseele)
 
